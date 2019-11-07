@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="courses_dropdown_options">
+        <item>In Progress</item>
+        <item>Dropped</item>
+        <item>Completed</item>
+        <item>Planned to Take</item>
+    </string-array>
+</resources>
