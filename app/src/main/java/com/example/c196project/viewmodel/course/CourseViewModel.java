@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.example.c196project.database.AppRepository;
 import com.example.c196project.database.course.CourseEntity;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,4 +28,8 @@ public class CourseViewModel extends AndroidViewModel
         liveDataCourses = appRepository.appCourses;
     }
 
+    public List<? extends CourseEntity> getCoursesByTerm(int termId)
+    {
+        return appRepository.getCoursesByTerm(termId);
+    }
 }

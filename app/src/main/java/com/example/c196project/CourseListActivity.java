@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +22,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.c196project.utilities.Const.TERM_ID;
 
 public class CourseListActivity extends AppCompatActivity
 {
@@ -35,6 +40,10 @@ public class CourseListActivity extends AppCompatActivity
     private CoursesAdapter CoursesAdapter;
     private CourseViewModel CourseViewModel;
     private FloatingActionButton addCourseFab;
+    private ArrayList<String> relatedCourseIds;
+    private Bundle kvExtras;
+    private Executor executor = Executors.newSingleThreadExecutor();
+    private int termId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +61,7 @@ public class CourseListActivity extends AppCompatActivity
             Intent intent = new Intent(this.getApplicationContext(), CoursesEditorActivity.class);
             startActivity(intent);
         });
+        kvExtras = getIntent().getExtras();
         initRecyclerView();
         initViewModel();
         initNotifications();
@@ -63,25 +73,32 @@ public class CourseListActivity extends AppCompatActivity
 
     private void initViewModel()
     {
-        final Observer<List<CourseEntity>> CourseObserver = new Observer<List<CourseEntity>>()
-        {
-            @Override
-            public void onChanged(@Nullable List<CourseEntity> courseEntities)
-            {
-                CourseList.clear();
+        CourseViewModel = ViewModelProviders.of(this)
+                .get(CourseViewModel.class);
+
+        final Observer<List<CourseEntity>> CourseObserver = courseEntities -> {
+            CourseList.clear();
+            termId = 0;
+            if (kvExtras != null) {
+                termId = kvExtras.getInt(TERM_ID);
+            }
+            if (termId == 0) {
                 CourseList.addAll(courseEntities);
-                if (CoursesAdapter == null) {
-                    CoursesAdapter = new CoursesAdapter(courseEntities, CourseListActivity.this);
-                    CoursesRecyclerView.setAdapter(CoursesAdapter);
-                }
-                else {
-                    CoursesAdapter.notifyDataSetChanged();
-                }
+            }
+            else {
+                // There's a term ID that we need to parse for related courses
+                executor.execute(() -> CourseList.addAll(CourseViewModel.getCoursesByTerm(termId)));
+
+            }
+            if (CoursesAdapter == null) {
+                CoursesAdapter = new CoursesAdapter(courseEntities, CourseListActivity.this);
+                CoursesRecyclerView.setAdapter(CoursesAdapter);
+            }
+            else {
+                CoursesAdapter.notifyDataSetChanged();
             }
         };
 
-        CourseViewModel = ViewModelProviders.of(this)
-                .get(CourseViewModel.class);
         CourseViewModel.liveDataCourses.observe(this, CourseObserver);
     }
 

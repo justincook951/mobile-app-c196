@@ -16,10 +16,11 @@ import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.database.coursenote.CourseNoteDao;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
 import com.example.c196project.database.mtmrelationships.TermCourseJoinDao;
+import com.example.c196project.database.mtmrelationships.TermCourseJoinEntity;
 import com.example.c196project.database.term.TermDao;
 import com.example.c196project.database.term.TermEntity;
 
-@Database(entities = {TermEntity.class, CourseEntity.class, AssessmentEntity.class, MentorEntity.class, CourseNoteEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {TermEntity.class, CourseEntity.class, AssessmentEntity.class, MentorEntity.class, CourseNoteEntity.class, TermCourseJoinEntity.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 
 public abstract class AppDatabase extends RoomDatabase

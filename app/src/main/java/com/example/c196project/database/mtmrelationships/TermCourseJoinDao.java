@@ -25,7 +25,7 @@ public interface TermCourseJoinDao
             "INNER JOIN termToCourse " +
             "ON course.id = termToCourse.courseId " +
             "WHERE termToCourse.termId = :termId")
-    LiveData<List<CourseEntity>> getAllCoursesInTerm(final int termId);
+    List<CourseEntity> getAllCoursesInTerm(final int termId);
 
     @Query("SELECT count(*) AS count FROM course " +
             "INNER JOIN termToCourse " +

@@ -216,4 +216,9 @@ public class AppRepository
     {
         return appDb.termCourseJoinDao().getCountCoursesInTerms(termEntity.getId());
     }
+
+    public List<CourseEntity> getCoursesByTerm(int termId)
+    {
+        return appDb.termCourseJoinDao().getAllCoursesInTerm(termId);
+    }
 }
