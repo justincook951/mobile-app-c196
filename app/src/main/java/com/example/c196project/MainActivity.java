@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.example.c196project.utilities.WGUNotificationMgr;
 import com.example.c196project.viewmodel.MainViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity
 
     private MainViewModel mainViewModel;
     private WGUNotificationMgr notifymgr;
+    // Assessment nav is re-used elsewhere; manually add the onClick event
+    private FloatingActionButton assessmentNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        assessmentNav = findViewById(R.id.nav_to_assessment);
+        assessmentNav.setOnClickListener(v -> send_nav_request(findViewById(R.id.nav_to_assessment)));
 
         ButterKnife.bind(this);
         initViewModel();

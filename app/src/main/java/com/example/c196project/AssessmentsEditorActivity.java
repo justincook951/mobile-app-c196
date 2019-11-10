@@ -4,19 +4,24 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.utilities.Standardizer;
 import com.example.c196project.viewmodel.assessment.AssessmentEditorViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +36,8 @@ public class AssessmentsEditorActivity extends AppCompatActivity
     TextView assessmentNameField;
     @BindView(R.id.end_date_replaceable)
     TextView endDateText;
+    @BindView(R.id.related_course_dropdown)
+    Spinner relatedCourseDropdown;
 
     Button startBtn, endBtn;
     DatePickerDialog datePicker;
@@ -81,6 +88,7 @@ public class AssessmentsEditorActivity extends AppCompatActivity
 
     private void initViewModel()
     {
+        Log.e("NPE", "Initing Asseditor VM");
         assessmentEditorViewModel = ViewModelProviders.of(this).get(AssessmentEditorViewModel.class);
         assessmentEditorViewModel.mutableAssessment.observe(this, assessmentEntity -> {
             if (assessmentEntity != null && !isInEdit) {
@@ -88,6 +96,20 @@ public class AssessmentsEditorActivity extends AppCompatActivity
                 assessmentNameField.setText(assessmentEntity.getTitle());
                 endDate = assessmentEntity.getEndDate();
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
+                int adapterIndex = 0;
+                for (int i = 0; i < assessmentEditorViewModel.totalCoursesCount; i++) {
+                    if (true) {
+                        Log.i("MethodCalled", (assessmentEditorViewModel.liveDataCourses.getValue().get(i)).toString());
+                    }
+                }
+                relatedCourseDropdown.setSelection(adapterIndex);
+            }
+        });
+
+        assessmentEditorViewModel.liveDataCourses.observe(this, courseData -> {
+            if (courseData != null) {
+                ArrayAdapter coursesAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, courseData);
+                relatedCourseDropdown.setAdapter(coursesAdapter);
             }
         });
 
@@ -125,7 +147,8 @@ public class AssessmentsEditorActivity extends AppCompatActivity
             // Do not even try to reference them in saveAssessment
             finish();
         }
-        assessmentEditorViewModel.saveAssessment(assessmentName, endDate);
+        int courseId = ((CourseEntity)relatedCourseDropdown.getSelectedItem()).getId();
+        assessmentEditorViewModel.saveAssessment(assessmentName, endDate, courseId);
         finish();
     }
 

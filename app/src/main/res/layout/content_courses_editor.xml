@@ -110,6 +110,7 @@
         app:layout_constraintTop_toBottomOf="@+id/end_date_button" />
 
     <include
+        android:id="@+id/include"
         layout="@layout/nav_course_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,6 +118,15 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/course_status_dropdown" />
+
+    <include
+        layout="@layout/nav_assessment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

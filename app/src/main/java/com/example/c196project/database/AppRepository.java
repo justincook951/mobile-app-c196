@@ -27,6 +27,7 @@ public class AppRepository
     public LiveData<List<AssessmentEntity>> appAssessments;
     public LiveData<List<MentorEntity>> appMentors;
     public LiveData<List<CourseNoteEntity>> appNotes;
+    private int courseCount;
 
     public static AppRepository getInstance(Context context)
     {
@@ -44,6 +45,8 @@ public class AppRepository
         appAssessments = getAllAssessments();
         appMentors = getAllMentors();
         appNotes = getAllNotes();
+
+        executor.execute(() -> courseCount = appDb.courseDao().getCount());
     }
 
     private LiveData<List<TermEntity>> getAllTerms()
@@ -109,6 +112,11 @@ public class AppRepository
     public void deleteCourse(CourseEntity course)
     {
         executor.execute(() -> appDb.courseDao().deleteCourse(course));
+    }
+
+    public int getCoursesCount()
+    {
+        return courseCount;
     }
 
     // =======ASSESSMENTS==========
@@ -221,4 +229,5 @@ public class AppRepository
     {
         return appDb.termCourseJoinDao().getAllCoursesInTerm(termId);
     }
+
 }

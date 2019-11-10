@@ -38,4 +38,5 @@
     <string name="see_course_note_info">See notes for this course</string>
     <string name="course_note_name">Enter Course Note Here</string>
     <string name="get_term_courses_tv">See courses in this term</string>
+    <string name="assessments_by_course_tv">See all assessments for this course</string>
 </resources>

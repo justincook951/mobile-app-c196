@@ -30,4 +30,7 @@ public interface CourseDao
 
     @Query("DELETE FROM course")
     int deleteAll();
+
+    @Query("SELECT count(*) FROM course")
+    int getCount();
 }

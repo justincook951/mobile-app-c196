@@ -67,6 +67,8 @@ public class CoursesEditorActivity extends AppCompatActivity
         startBtn.setOnClickListener(v -> showCalendar(startDateText, "start"));
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
 
+        ((TextView)findViewById(R.id.assessment_nav_textview)).setText(R.string.assessments_by_course_tv);
+
         courseStatusSpinner = findViewById(R.id.course_status_dropdown);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,

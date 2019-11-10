@@ -41,12 +41,10 @@ public class CourseNoteEditorViewModel extends AndroidViewModel
 
     public void saveCourseNote(String courseNote, int courseId)
     {
-        Log.i("MethodCalled", "Called SaveCourseNote");
         isValidInput = true;
         CourseNoteEntity selectedCourseNote = mutableCourseNote.getValue();
         if (selectedCourseNote == null) {
             // Saving a new courseNote
-            Log.i("MethodCalled", "Saving new note");
             selectedCourseNote = new CourseNoteEntity(courseId, courseNote);
         }
         else {

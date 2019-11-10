@@ -13,22 +13,33 @@ public class AssessmentEntity
     private int id;
     private String title;
     private Date endDate;
+    private int courseId;
 
     @Ignore
     public AssessmentEntity() {
     }
 
-    public AssessmentEntity(int id, String title, Date endDate)
+    public AssessmentEntity(int id, String title, Date endDate, int courseId)
     {
         this.id = id;
         this.title = title;
         this.endDate = endDate;
+        this.courseId = courseId;
+    }
+
+    @Ignore
+    public AssessmentEntity(String title, Date endDate, int courseId)
+    {
+        this.title = title;
+        this.endDate = endDate;
+        this.courseId = courseId;
     }
 
     @Ignore
     public AssessmentEntity(String title, Date endDate) {
         this.title = title;
         this.endDate = endDate;
+        this.courseId = 0;
     }
 
     public int getId() {
@@ -45,6 +56,16 @@ public class AssessmentEntity
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getCourseId()
+    {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId)
+    {
+        this.courseId = courseId;
     }
 
     public Date getEndDate() {

@@ -1,6 +1,7 @@
 package com.example.c196project.database.course;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -81,12 +82,6 @@ public class CourseEntity
     @Override
     public String toString()
     {
-        return "CourseEntity{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", status='" + status + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
+        return title + " (id: " + id + ")";
     }
 }

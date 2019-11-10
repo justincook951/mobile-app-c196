@@ -73,7 +73,6 @@ public class CourseNotesListActivity extends AppCompatActivity
                 courseId = kvExtras.getInt(COURSE_ID);
                 courseNoteList.clear();
                 for (CourseNoteEntity entity : courseNoteEntities) {
-                    Log.i("MethodCalled", "Examining course note for list addition: " + entity.toString());
                     if (entity.getCourseId() == courseId) {
                         courseNoteList.add(entity);
                     }
