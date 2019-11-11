@@ -169,7 +169,6 @@ public class TermsEditorActivity extends AppCompatActivity
     private void setDate(Date date, String dateLocation)
     {
         if (dateLocation.equals("start")) {
-            Log.i("DateSet", "Ran for dateLocation start");
             this.startDate = date;
         }
         else if (dateLocation.equals("end")) {

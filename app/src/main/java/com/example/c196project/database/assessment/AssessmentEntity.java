@@ -83,6 +83,7 @@ public class AssessmentEntity
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", endDate=" + endDate +
+                ", courseId=" + courseId +
                 '}';
     }
 }

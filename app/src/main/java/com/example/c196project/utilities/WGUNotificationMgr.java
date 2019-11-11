@@ -1,13 +1,24 @@
 package com.example.c196project.utilities;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.c196project.MainActivity;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import static com.example.c196project.utilities.Const.ALARM_EXTRA;
 
 public class WGUNotificationMgr
 {
@@ -41,9 +52,8 @@ public class WGUNotificationMgr
         notificationManager.createNotificationChannel(channel);
     }
 
-    public void sendNotification(View view)
+    public void sendNotification(int notificationId, String message)
     {
-        String message = "Oh no! Your barbarians are calling the hog riders the N-word! Also, Ben is awesome!";
         Notification notification =
                 new Notification.Builder(context,
                         channelId)
@@ -51,7 +61,21 @@ public class WGUNotificationMgr
                         .setSmallIcon(android.R.drawable.ic_dialog_info)
                         .setChannelId(channelId)
                         .build();
-        notificationManager.notify(100, notification);
+        notificationManager.notify(notificationId, notification);
+    }
+
+    public void setAlarm(Date date, String extraText, Context context)
+    {
+        Intent receiverIntent = new Intent(context, WGUReceiver.class);
+        receiverIntent.putExtra(ALARM_EXTRA, extraText);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, receiverIntent, 0);
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Calendar due = Calendar.getInstance();
+        due.setTime(date);
+        // Don't keep track of hrs / mins
+        due.set(Calendar.HOUR_OF_DAY, 0);
+        due.set(Calendar.MINUTE, 0);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, due.getTimeInMillis(), sender);
     }
 
 

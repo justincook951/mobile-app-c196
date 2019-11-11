@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.c196project.database.AppRepository;
 import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
+import com.example.c196project.utilities.WGUNotificationMgr;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +29,8 @@ public class AssessmentEditorViewModel extends AndroidViewModel
     private Executor executor = Executors.newSingleThreadExecutor();
     private static boolean isValidInput = true;
     public LiveData<List<CourseEntity>> liveDataCourses;
+    public int courseId;
+    public static WGUNotificationMgr notifymgr;
 
     public AssessmentEditorViewModel(@NonNull Application application)
     {
@@ -44,10 +47,11 @@ public class AssessmentEditorViewModel extends AndroidViewModel
             AssessmentEntity assessment = appRepository.getAssessmentById(assessmentId);
             // Triggers observer's onChange method
             mutableAssessment.postValue(assessment);
+            courseId = assessment.getCourseId();
         });
     }
 
-    public void saveAssessment(String assessmentTitle, Date endDate, int courseId)
+    public void saveAssessment(String assessmentTitle, Date endDate, int courseId, boolean setAlarm)
     {
         isValidInput = true;
         AssessmentEntity selectedAssessment = mutableAssessment.getValue();
@@ -67,6 +71,13 @@ public class AssessmentEditorViewModel extends AndroidViewModel
         selectedAssessment = validateAssessment(selectedAssessment);
         if (isValidInput) {
             appRepository.insertAssessment(selectedAssessment);
+            mutableAssessment.postValue(selectedAssessment);
+            if (setAlarm) {
+                if (notifymgr == null) {
+                    notifymgr = new WGUNotificationMgr();
+                }
+                notifymgr.setAlarm(endDate, "Your assessment is today for class: " + assessmentTitle + "!", this.getApplication().getApplicationContext());
+            }
         }
     }
 

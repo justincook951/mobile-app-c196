@@ -1,9 +1,13 @@
 package com.example.c196project;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.c196project.utilities.WGUNotificationMgr;
+import com.example.c196project.utilities.WGUReceiver;
 import com.example.c196project.viewmodel.MainViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -16,7 +20,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+
 import butterknife.ButterKnife;
+
+import static com.example.c196project.utilities.Const.ALARM_EXTRA;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -173,8 +181,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(mentorIntent);
                 break;
             case (R.id.send_test_notify):
-                Log.i("Notification", "It's notify time!");
-                notifymgr.sendNotification(view);
+                WGUNotificationMgr notifymgr = new WGUNotificationMgr();
+
             default:
                 break;
         }

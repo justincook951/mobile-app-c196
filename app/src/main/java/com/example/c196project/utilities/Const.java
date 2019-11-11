@@ -9,5 +9,6 @@ public class Const
     public static final String MENTOR_ID = "MENTOR_ID_TO_EDIT";
     public static final String COURSENOTE_ID = "COURSENOTE_ID_TO_EDIT";
     public static final String COURSE_LIST_KEY = "COURSELIST_KEY";
+    public static final String ALARM_EXTRA = "ALARM_EXTRA_DATA";
 
 }

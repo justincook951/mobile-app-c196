@@ -49,6 +49,13 @@
         <activity android:name=".CourseNotesEditorActivity"
             android:parentActivityName=".CourseNotesListActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <receiver android:name=".utilities.WGUReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

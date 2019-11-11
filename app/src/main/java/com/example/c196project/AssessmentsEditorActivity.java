@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,8 +44,10 @@ public class AssessmentsEditorActivity extends AppCompatActivity
     DatePickerDialog datePicker;
     Date endDate;
     Calendar cal;
+    CheckBox setAlarm;
     private boolean isInEdit;
     private AssessmentEditorViewModel assessmentEditorViewModel;
+    private static int existingCourseId;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -58,6 +61,7 @@ public class AssessmentsEditorActivity extends AppCompatActivity
 
         startBtn = findViewById(R.id.start_date_button);
         endBtn = findViewById(R.id.end_date_button);
+        setAlarm = findViewById(R.id.set_alarm);
 
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
 
@@ -88,7 +92,6 @@ public class AssessmentsEditorActivity extends AppCompatActivity
 
     private void initViewModel()
     {
-        Log.e("NPE", "Initing Asseditor VM");
         assessmentEditorViewModel = ViewModelProviders.of(this).get(AssessmentEditorViewModel.class);
         assessmentEditorViewModel.mutableAssessment.observe(this, assessmentEntity -> {
             if (assessmentEntity != null && !isInEdit) {
@@ -96,13 +99,7 @@ public class AssessmentsEditorActivity extends AppCompatActivity
                 assessmentNameField.setText(assessmentEntity.getTitle());
                 endDate = assessmentEntity.getEndDate();
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
-                int adapterIndex = 0;
-                for (int i = 0; i < assessmentEditorViewModel.totalCoursesCount; i++) {
-                    if (true) {
-                        Log.i("MethodCalled", (assessmentEditorViewModel.liveDataCourses.getValue().get(i)).toString());
-                    }
-                }
-                relatedCourseDropdown.setSelection(adapterIndex);
+                existingCourseId = assessmentEntity.getCourseId();
             }
         });
 
@@ -110,6 +107,15 @@ public class AssessmentsEditorActivity extends AppCompatActivity
             if (courseData != null) {
                 ArrayAdapter coursesAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, courseData);
                 relatedCourseDropdown.setAdapter(coursesAdapter);
+                existingCourseId = assessmentEditorViewModel.courseId;
+                if (existingCourseId != 0) {
+                    for (int dropdownIndex = 0; dropdownIndex < courseData.size(); dropdownIndex++) {
+                        if (courseData.get(dropdownIndex).getId() == existingCourseId) {
+                            relatedCourseDropdown.setSelection(dropdownIndex);
+                            break;
+                        }
+                    }
+                }
             }
         });
 
@@ -121,6 +127,7 @@ public class AssessmentsEditorActivity extends AppCompatActivity
             // This is a assessment that's being edited
             int assessmentId = kvExtras.getInt(ASSESSMENT_ID);
             assessmentEditorViewModel.loadById(assessmentId);
+            existingCourseId = assessmentEditorViewModel.courseId;
             final FloatingActionButton delButton = findViewById(R.id.delete_assessment);
             delButton.setOnClickListener(v -> deleteAssessment());
         }
@@ -144,11 +151,11 @@ public class AssessmentsEditorActivity extends AppCompatActivity
     private void saveAndExit() {
         String assessmentName = assessmentNameField.getText().toString();
         if (endDate == null) {
-            // Do not even try to reference them in saveAssessment
+            // Do not even try to reference saveAssessment
             finish();
         }
         int courseId = ((CourseEntity)relatedCourseDropdown.getSelectedItem()).getId();
-        assessmentEditorViewModel.saveAssessment(assessmentName, endDate, courseId);
+        assessmentEditorViewModel.saveAssessment(assessmentName, endDate, courseId, setAlarm.isChecked());
         finish();
     }
 

@@ -169,7 +169,6 @@ public class CoursesEditorActivity extends AppCompatActivity
     private void setDate(Date date, String dateLocation)
     {
         if (dateLocation == "start") {
-            Log.i("DateSet", "Ran for dateLocation start");
             this.startDate = date;
         }
         else if (dateLocation == "end"){
