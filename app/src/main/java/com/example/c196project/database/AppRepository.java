@@ -8,6 +8,7 @@ import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
+import com.example.c196project.database.mtmrelationships.TermCourseJoinEntity;
 import com.example.c196project.database.term.TermEntity;
 import com.example.c196project.utilities.TestData;
 
@@ -230,4 +231,13 @@ public class AppRepository
         return appDb.termCourseJoinDao().getAllCoursesInTerm(termId);
     }
 
+    public void addTermToCourse(TermCourseJoinEntity joiner)
+    {
+        executor.execute(() -> appDb.termCourseJoinDao().insertTermCourseJoin(joiner));
+    }
+
+    public void deleteCourseNote(TermCourseJoinEntity joiner)
+    {
+        executor.execute(() -> appDb.termCourseJoinDao().deleteTermCourseJoin(joiner));
+    }
 }

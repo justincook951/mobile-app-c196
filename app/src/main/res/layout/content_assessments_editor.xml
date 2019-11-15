@@ -31,7 +31,7 @@
         android:hint="@string/enter_note"
         android:inputType="textPersonName"
         android:text="@string/assessment_name"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -96,5 +96,25 @@
         android:text="Set Alarm For This Date"
         app:layout_constraintStart_toEndOf="@+id/end_date_button"
         app:layout_constraintTop_toBottomOf="@+id/endDateText" />
+
+    <TextView
+        android:id="@+id/type_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="22sp"
+        android:text="@string/assessment_type_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/related_course_dropdown" />
+
+    <Spinner
+        android:id="@+id/assessment_type_dropdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/type_indicator" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

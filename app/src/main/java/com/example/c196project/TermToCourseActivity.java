@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.ui.CoursesAdapter;
+import com.example.c196project.ui.TermToCourseAdapter;
 import com.example.c196project.viewmodel.course.CourseViewModel;
+import com.example.c196project.viewmodel.mtmrelationships.TermToCourseViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -28,17 +30,15 @@ import butterknife.ButterKnife;
 
 import static com.example.c196project.utilities.Const.TERM_ID;
 
-public class CourseListActivity extends AppCompatActivity
+public class TermToCourseActivity extends AppCompatActivity
 {
 
-    @BindView(R.id.courses_recycler)
+    @BindView(R.id.courses_recycler_ttc)
     RecyclerView CoursesRecyclerView;
 
     private List<CourseEntity> CourseList = new ArrayList<>();
-    private CoursesAdapter CoursesAdapter;
-    private CourseViewModel CourseViewModel;
-    private FloatingActionButton addCourseFab;
-    private ArrayList<String> relatedCourseIds;
+    private TermToCourseAdapter CoursesAdapter;
+    private TermToCourseViewModel viewModel;
     private Bundle kvExtras;
     private Executor executor = Executors.newSingleThreadExecutor();
     private int termId;
@@ -47,49 +47,27 @@ public class CourseListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_courses);
+        setContentView(R.layout.activity_term_to_course);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
-        addCourseFab = findViewById(R.id.add_course_fab);
-        addCourseFab.setOnClickListener(view -> {
-            Intent intent = new Intent(this.getApplicationContext(), CourseEditorActivity.class);
-            startActivity(intent);
-        });
-        kvExtras = getIntent().getExtras();
         initRecyclerView();
         initViewModel();
-        initNotifications();
-    }
-
-    private void initNotifications()
-    {
     }
 
     private void initViewModel()
     {
-        CourseViewModel = ViewModelProviders.of(this)
-                .get(CourseViewModel.class);
+        viewModel = ViewModelProviders.of(this)
+                .get(TermToCourseViewModel.class);
 
         final Observer<List<CourseEntity>> CourseObserver = courseEntities -> {
             CourseList.clear();
-            termId = 0;
-            if (kvExtras != null) {
-                termId = kvExtras.getInt(TERM_ID);
-            }
-            if (termId == 0) {
-                CourseList.addAll(courseEntities);
-            }
-            else {
-                // There's a term ID that we need to parse for related courses
-                executor.execute(() -> CourseList.addAll(CourseViewModel.getCoursesByTerm(termId)));
-
-            }
+            CourseList.addAll(courseEntities);
             if (CoursesAdapter == null) {
-                CoursesAdapter = new CoursesAdapter(courseEntities, CourseListActivity.this);
+                CoursesAdapter = new TermToCourseAdapter(courseEntities, TermToCourseActivity.this);
                 CoursesRecyclerView.setAdapter(CoursesAdapter);
             }
             else {
@@ -97,7 +75,7 @@ public class CourseListActivity extends AppCompatActivity
             }
         };
 
-        CourseViewModel.liveDataCourses.observe(this, CourseObserver);
+        viewModel.liveDataCourses.observe(this, CourseObserver);
     }
 
     private void initRecyclerView()
@@ -106,7 +84,7 @@ public class CourseListActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         CoursesRecyclerView.setLayoutManager(layoutManager);
 
-        CoursesAdapter = new CoursesAdapter(CourseList, this);
+        CoursesAdapter = new TermToCourseAdapter(CourseList, this);
         CoursesRecyclerView.setAdapter(CoursesAdapter);
 
         DividerItemDecoration divider = new DividerItemDecoration(

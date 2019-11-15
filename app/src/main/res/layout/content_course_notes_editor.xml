@@ -31,7 +31,7 @@
         android:hint="@string/enter_note"
         android:inputType="textMultiLine"
         android:text="@string/course_note_name"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

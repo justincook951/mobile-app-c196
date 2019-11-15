@@ -11,7 +11,7 @@ public class AssessmentEntity
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String title;
+    private String title, assessmentType;
     private Date endDate;
     private int courseId;
 
@@ -19,20 +19,22 @@ public class AssessmentEntity
     public AssessmentEntity() {
     }
 
-    public AssessmentEntity(int id, String title, Date endDate, int courseId)
+    public AssessmentEntity(int id, String title, Date endDate, int courseId, String assessmentType)
     {
         this.id = id;
         this.title = title;
         this.endDate = endDate;
         this.courseId = courseId;
+        this.assessmentType = assessmentType;
     }
 
     @Ignore
-    public AssessmentEntity(String title, Date endDate, int courseId)
+    public AssessmentEntity(String title, Date endDate, int courseId, String assessmentType)
     {
         this.title = title;
         this.endDate = endDate;
         this.courseId = courseId;
+        this.assessmentType = assessmentType;
     }
 
     @Ignore
@@ -76,6 +78,16 @@ public class AssessmentEntity
         this.endDate = endDate;
     }
 
+    public String getAssessmentType()
+    {
+        return assessmentType;
+    }
+
+    public void setAssessmentType(String assessmentType)
+    {
+        this.assessmentType = assessmentType;
+    }
+
     @Override
     public String toString()
     {
@@ -84,6 +96,7 @@ public class AssessmentEntity
                 ", title='" + title + '\'' +
                 ", endDate=" + endDate +
                 ", courseId=" + courseId +
+                ", assessmentType=" + assessmentType +
                 '}';
     }
 }

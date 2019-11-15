@@ -28,7 +28,7 @@
         <activity android:name=".CourseListActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".CoursesEditorActivity"
+        <activity android:name=".CourseEditorActivity"
             android:parentActivityName=".CourseListActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".AssessmentsListActivity"
@@ -48,6 +48,9 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".CourseNotesEditorActivity"
             android:parentActivityName=".CourseNotesListActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".TermToCourseActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <receiver android:name=".utilities.WGUReceiver"  android:exported="true">
             <intent-filter>

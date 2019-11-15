@@ -51,7 +51,7 @@ public class AssessmentEditorViewModel extends AndroidViewModel
         });
     }
 
-    public void saveAssessment(String assessmentTitle, Date endDate, int courseId, boolean setAlarm)
+    public void saveAssessment(String assessmentTitle, Date endDate, int courseId, String assessmentType, boolean setAlarm)
     {
         isValidInput = true;
         AssessmentEntity selectedAssessment = mutableAssessment.getValue();
@@ -60,13 +60,14 @@ public class AssessmentEditorViewModel extends AndroidViewModel
             if (endDate == null) {
                 return;
             }
-            selectedAssessment = new AssessmentEntity(assessmentTitle, endDate, courseId);
+            selectedAssessment = new AssessmentEntity(assessmentTitle, endDate, courseId, assessmentType);
         }
         else {
             // Editing an existing assessment
             selectedAssessment.setTitle(assessmentTitle);
             selectedAssessment.setEndDate(endDate);
             selectedAssessment.setCourseId(courseId);
+            selectedAssessment.setAssessmentType(assessmentType);
         }
         selectedAssessment = validateAssessment(selectedAssessment);
         if (isValidInput) {
@@ -76,7 +77,7 @@ public class AssessmentEditorViewModel extends AndroidViewModel
                 if (notifymgr == null) {
                     notifymgr = new WGUNotificationMgr();
                 }
-                notifymgr.setAlarm(endDate, "Your assessment is today for class: " + assessmentTitle + "!", this.getApplication().getApplicationContext());
+                notifymgr.setAlarm(endDate, "Your assessment is today: " + assessmentTitle + "!", this.getApplication().getApplicationContext());
             }
         }
     }

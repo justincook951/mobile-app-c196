@@ -1,16 +1,13 @@
 package com.example.c196project;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,7 +28,7 @@ import butterknife.ButterKnife;
 import static com.example.c196project.utilities.Const.KEY_EDIT;
 import static com.example.c196project.utilities.Const.COURSE_ID;
 
-public class CoursesEditorActivity extends AppCompatActivity
+public class CourseEditorActivity extends AppCompatActivity
 {
 
     @BindView(R.id.course_name)
@@ -48,6 +45,7 @@ public class CoursesEditorActivity extends AppCompatActivity
     Date startDate, endDate;
     Calendar cal;
     Bundle kvExtras;
+    CheckBox setAlarm;
     private boolean isInEdit;
     private CourseEditorViewModel courseEditorViewModel;
 
@@ -66,6 +64,7 @@ public class CoursesEditorActivity extends AppCompatActivity
 
         startBtn.setOnClickListener(v -> showCalendar(startDateText, "start"));
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
+        setAlarm = findViewById(R.id.set_alarm);
 
         ((TextView)findViewById(R.id.assessment_nav_textview)).setText(R.string.assessments_by_course_tv);
 
@@ -92,7 +91,7 @@ public class CoursesEditorActivity extends AppCompatActivity
         int month = cal.get(Calendar.MONTH);
         int year = cal.get(Calendar.YEAR);
 
-        datePicker = new DatePickerDialog(CoursesEditorActivity.this,
+        datePicker = new DatePickerDialog(CourseEditorActivity.this,
                     (view, selYear, selMonth, selDay) -> {
                         displayLocation.setText(Standardizer.dateStringFromComponents(selYear, selMonth, selDay));
                         setDate(Standardizer.dateFromComponents(selYear, selMonth, selDay), dateToSet);
@@ -157,7 +156,7 @@ public class CoursesEditorActivity extends AppCompatActivity
             finish();
         }
         String selectedStatus = courseStatusSpinner.getSelectedItem().toString();
-        courseEditorViewModel.saveCourse(courseName, selectedStatus, startDate, endDate);
+        courseEditorViewModel.saveCourse(courseName, selectedStatus, startDate, endDate, setAlarm.isChecked());
         finish();
     }
 

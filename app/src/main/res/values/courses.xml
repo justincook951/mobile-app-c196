@@ -7,4 +7,9 @@
         <item>Completed</item>
         <item>Planned to Take</item>
     </string-array>
+    <string-array
+        name="assessment_type_dropdown_options">
+        <item>Objective</item>
+        <item>Performance</item>
+    </string-array>
 </resources>

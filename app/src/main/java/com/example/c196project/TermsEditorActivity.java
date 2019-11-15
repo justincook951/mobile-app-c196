@@ -46,7 +46,7 @@ public class TermsEditorActivity extends AppCompatActivity
     FloatingActionButton navToCourse;
     private boolean isInEdit;
     private TermEditorViewModel termEditorViewModel;
-    private TextView courseNavTextview;
+    private TextView courseNavTextview, CoursesTextview;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -65,7 +65,8 @@ public class TermsEditorActivity extends AppCompatActivity
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
 
         courseNavTextview = findViewById(R.id.course_nav_textview);
-        courseNavTextview.setText(R.string.get_term_courses_tv);
+        courseNavTextview.setText("Add courses to this term");
+        CoursesTextview = findViewById(R.id.course_tv_term);
 
         if (prevState != null) {
             isInEdit = prevState.getBoolean(KEY_EDIT);
@@ -103,6 +104,17 @@ public class TermsEditorActivity extends AppCompatActivity
                 endDate = termEntity.getEndDate();
                 startDateText.setText(Standardizer.standardizeSingleDateString(startDate));
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
+                String coursesString = "";
+                for (CourseEntity courseEntity : termEditorViewModel.getRelatedCourses()) {
+                    coursesString += courseEntity.getTitle() + ", ";
+                }
+                if (coursesString.equals("")) {
+                    coursesString = "No courses in this term.";
+                }
+                else {
+                    coursesString = coursesString.substring(0, coursesString.length() - 2);
+                }
+                CoursesTextview.setText(coursesString);
             }
         });
 
@@ -120,20 +132,18 @@ public class TermsEditorActivity extends AppCompatActivity
         }
 
         navToCourse = findViewById(R.id.nav_to_course);
-        if (kvExtras != null) {
-            navToCourse.setOnClickListener(v -> {
-                Intent courseListIntent = new Intent(this, CourseListActivity.class);
-                List<CourseEntity> relatedCourses = termEditorViewModel.getRelatedCourses();
-                ArrayList<String> courseIds = new ArrayList<>();
-                for (CourseEntity course : relatedCourses) {
-                    courseIds.add(Integer.toString(course.getId()));
-                }
-                courseListIntent.putStringArrayListExtra(COURSE_LIST_KEY, courseIds);
-                courseListIntent.putExtra(TERM_ID, kvExtras.getInt(TERM_ID));
-                startActivity(courseListIntent);
-            });
-        }
-
+        navToCourse.setOnClickListener(v -> {
+            Intent courseListIntent = new Intent(this, TermToCourseActivity.class);
+            List<CourseEntity> relatedCourses = termEditorViewModel.getRelatedCourses();
+            Log.i("MethodCalled", "Related courses list:" + relatedCourses);
+            ArrayList<String> courseIds = new ArrayList<>();
+            for (CourseEntity course : relatedCourses) {
+                courseIds.add(Integer.toString(course.getId()));
+            }
+            courseListIntent.putStringArrayListExtra(COURSE_LIST_KEY, courseIds);
+            courseListIntent.putExtra(TERM_ID, kvExtras.getInt(TERM_ID));
+            startActivity(courseListIntent);
+        });
     }
 
     @Override

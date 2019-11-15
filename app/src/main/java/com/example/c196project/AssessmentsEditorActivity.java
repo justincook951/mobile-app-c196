@@ -20,6 +20,7 @@ import com.example.c196project.utilities.Standardizer;
 import com.example.c196project.viewmodel.assessment.AssessmentEditorViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,8 @@ public class AssessmentsEditorActivity extends AppCompatActivity
     TextView endDateText;
     @BindView(R.id.related_course_dropdown)
     Spinner relatedCourseDropdown;
+    @BindView(R.id.assessment_type_dropdown)
+    Spinner assessmentTypeSpinner;
 
     Button startBtn, endBtn;
     DatePickerDialog datePicker;
@@ -48,6 +51,7 @@ public class AssessmentsEditorActivity extends AppCompatActivity
     private boolean isInEdit;
     private AssessmentEditorViewModel assessmentEditorViewModel;
     private static int existingCourseId;
+    private String assessmentType;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -64,6 +68,21 @@ public class AssessmentsEditorActivity extends AppCompatActivity
         setAlarm = findViewById(R.id.set_alarm);
 
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
+
+        Spinner assessmentTypeSpinner = findViewById(R.id.assessment_type_dropdown);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapterAssessmentType = ArrayAdapter.createFromResource(this,
+                R.array.assessment_type_dropdown_options, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapterAssessmentType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        assessmentTypeSpinner.setAdapter(adapterAssessmentType);
+
+        Spinner relatedCourseDropdown = findViewById(R.id.related_course_dropdown);
+        ArrayAdapter<CharSequence> adapterCourses = ArrayAdapter.createFromResource(this,
+                R.array.courses_dropdown_options, android.R.layout.simple_spinner_item);
+        adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        relatedCourseDropdown.setAdapter(adapterCourses);
 
         if (prevState != null) {
             isInEdit = prevState.getBoolean(KEY_EDIT);
@@ -100,11 +119,13 @@ public class AssessmentsEditorActivity extends AppCompatActivity
                 endDate = assessmentEntity.getEndDate();
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
                 existingCourseId = assessmentEntity.getCourseId();
+                assessmentType = assessmentEntity.getAssessmentType();
+                Log.i("MethodCalled", "InitViewModel says the assessmenttype is: " + assessmentType);
             }
         });
 
         assessmentEditorViewModel.liveDataCourses.observe(this, courseData -> {
-            if (courseData != null) {
+            if (courseData != null && !courseData.isEmpty()) {
                 ArrayAdapter coursesAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, courseData);
                 relatedCourseDropdown.setAdapter(coursesAdapter);
                 existingCourseId = assessmentEditorViewModel.courseId;
@@ -116,6 +137,18 @@ public class AssessmentsEditorActivity extends AppCompatActivity
                         }
                     }
                 }
+                if (assessmentType != null) {
+                    ArrayAdapter<CharSequence> adapterAssessmentType = ArrayAdapter.createFromResource(this,
+                            R.array.assessment_type_dropdown_options, android.R.layout.simple_spinner_item);
+                    int typePosition = adapterAssessmentType.getPosition(assessmentType);
+                    assessmentTypeSpinner.setSelection(typePosition);
+                }
+            }
+            else {
+                List<String> blankList = new ArrayList<>();
+                blankList.add("None");
+                ArrayAdapter coursesAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, blankList);
+                relatedCourseDropdown.setAdapter(coursesAdapter);
             }
         });
 
@@ -154,8 +187,15 @@ public class AssessmentsEditorActivity extends AppCompatActivity
             // Do not even try to reference saveAssessment
             finish();
         }
-        int courseId = ((CourseEntity)relatedCourseDropdown.getSelectedItem()).getId();
-        assessmentEditorViewModel.saveAssessment(assessmentName, endDate, courseId, setAlarm.isChecked());
+        int courseId = 0;
+        if (relatedCourseDropdown.getSelectedItem() instanceof CourseEntity) {
+            courseId = ((CourseEntity)relatedCourseDropdown.getSelectedItem()).getId();
+        }
+        else {
+            courseId = -1;
+        }
+        String assessmentType = assessmentTypeSpinner.getSelectedItem().toString();
+        assessmentEditorViewModel.saveAssessment(assessmentName, endDate, courseId, assessmentType, setAlarm.isChecked());
         finish();
     }
 

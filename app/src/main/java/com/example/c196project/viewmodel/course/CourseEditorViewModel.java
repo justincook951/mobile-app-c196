@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.c196project.database.AppRepository;
 import com.example.c196project.database.course.CourseEntity;
+import com.example.c196project.utilities.WGUNotificationMgr;
 
 import java.util.Date;
 import java.util.concurrent.Executor;
@@ -22,6 +23,7 @@ public class CourseEditorViewModel extends AndroidViewModel
     private AppRepository appRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
     private static boolean isValidInput = true;
+    private static WGUNotificationMgr notifymgr;
 
     public CourseEditorViewModel(@NonNull Application application)
     {
@@ -39,7 +41,7 @@ public class CourseEditorViewModel extends AndroidViewModel
         });
     }
 
-    public void saveCourse(String courseTitle, String status, Date startDate, Date endDate)
+    public void saveCourse(String courseTitle, String status, Date startDate, Date endDate, boolean setAlarm)
     {
         isValidInput = true;
         CourseEntity selectedCourse = mutableCourse.getValue();
@@ -60,6 +62,13 @@ public class CourseEditorViewModel extends AndroidViewModel
         selectedCourse = validateCourse(selectedCourse);
         if (isValidInput) {
             appRepository.insertCourse(selectedCourse);
+            if (setAlarm) {
+                if (notifymgr == null) {
+                    notifymgr = new WGUNotificationMgr();
+                }
+                notifymgr.setAlarm(startDate, "Your course is set to start today: " + courseTitle + "!", this.getApplication().getApplicationContext());
+                notifymgr.setAlarm(endDate, "Your course is set to end today: " + courseTitle + "!", this.getApplication().getApplicationContext());
+            }
         }
     }
 
