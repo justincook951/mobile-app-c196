@@ -16,12 +16,10 @@ import com.example.c196project.database.term.TermEntity;
 import com.example.c196project.utilities.Standardizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.example.c196project.utilities.Const.TERM_ID;
 

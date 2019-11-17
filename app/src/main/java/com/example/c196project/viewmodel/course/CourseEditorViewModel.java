@@ -6,13 +6,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.c196project.database.AppRepository;
+import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.utilities.WGUNotificationMgr;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -20,6 +23,7 @@ public class CourseEditorViewModel extends AndroidViewModel
 {
 
     public MutableLiveData<CourseEntity> mutableCourse = new MutableLiveData<>();
+    public MutableLiveData<List<AssessmentEntity>> relatedAssessments = new MutableLiveData<>();
     private AppRepository appRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
     private static boolean isValidInput = true;
@@ -38,6 +42,9 @@ public class CourseEditorViewModel extends AndroidViewModel
             CourseEntity course = appRepository.getCourseById(courseId);
             // Triggers observer's onChange method
             mutableCourse.postValue(course);
+            List<AssessmentEntity> assessmentList = appRepository.getAssessmentsByCourseId(courseId);
+            Log.i("MethodCalled", "The viewmodel is about to post assessmentsList: " + assessmentList);
+            relatedAssessments.postValue(assessmentList);
         });
     }
 
@@ -82,9 +89,11 @@ public class CourseEditorViewModel extends AndroidViewModel
         Date endDate = selectedCourse.getEndDate();
         if (startDate == null || endDate == null) {
             isValidInput = false;
+            return selectedCourse;
         }
         if (startDate.after(endDate)) {
             isValidInput = false;
+            return selectedCourse;
         }
         selectedCourse.setTitle(strippedString);
         return selectedCourse;

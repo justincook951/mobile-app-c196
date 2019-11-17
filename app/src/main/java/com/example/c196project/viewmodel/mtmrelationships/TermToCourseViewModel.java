@@ -1,7 +1,7 @@
 package com.example.c196project.viewmodel.mtmrelationships;
 
 import android.app.Application;
-import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -23,7 +23,7 @@ public class TermToCourseViewModel extends AndroidViewModel
     public LiveData<List<CourseEntity>> liveDataCourses;
     private AppRepository appRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
-    private static boolean isValidInput = true;
+    private List<CourseEntity> coursesByTerm;
 
     public TermToCourseViewModel(@NonNull Application application)
     {
@@ -38,8 +38,16 @@ public class TermToCourseViewModel extends AndroidViewModel
         appRepository.addTermToCourse(joiner);
     }
 
-    public void deleteRelationship()
+    public void deleteRelationship(int termId, int courseId)
     {
-        appRepository.deleteCourseNote(mutableRelationship.getValue());
+        appRepository.deleteTermCourseRelationship(termId, courseId);
+    }
+
+    public List<CourseEntity> getMatchedEntries(int termId)
+    {
+        if (coursesByTerm == null) {
+            executor.execute(() -> coursesByTerm = appRepository.getCoursesByTerm(termId));
+        }
+        return coursesByTerm;
     }
 }

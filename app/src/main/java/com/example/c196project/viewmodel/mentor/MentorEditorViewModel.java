@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.c196project.database.AppRepository;
 import com.example.c196project.database.mentor.MentorEntity;
 
-import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

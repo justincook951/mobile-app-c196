@@ -2,7 +2,6 @@ package com.example.c196project.viewmodel.assessment;
 
 import android.app.Application;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,7 +13,6 @@ import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.utilities.WGUNotificationMgr;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -48,6 +46,7 @@ public class AssessmentEditorViewModel extends AndroidViewModel
             // Triggers observer's onChange method
             mutableAssessment.postValue(assessment);
             courseId = assessment.getCourseId();
+            appRepository.getAssessmentsByCourseId(courseId);
         });
     }
 

@@ -1,9 +1,8 @@
 package com.example.c196project.database.coursenote;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.Date;
 
 @Entity(tableName = "courseNote")
 public class CourseNoteEntity

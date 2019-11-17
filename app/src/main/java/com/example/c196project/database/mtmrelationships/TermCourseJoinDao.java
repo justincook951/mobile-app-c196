@@ -1,6 +1,5 @@
 package com.example.c196project.database.mtmrelationships;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -38,4 +37,7 @@ public interface TermCourseJoinDao
 
     @Query("DELETE FROM termToCourse")
     int deleteAll();
+
+    @Query("SELECT * FROM termToCourse WHERE termId = :termId AND courseId = :courseId")
+    TermCourseJoinEntity getEntityByValues(int termId, int courseId);
 }

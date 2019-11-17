@@ -1,7 +1,7 @@
 package com.example.c196project.database.course;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;

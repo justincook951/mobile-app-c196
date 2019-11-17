@@ -3,6 +3,8 @@ package com.example.c196project;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,22 +13,27 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.utilities.Standardizer;
 import com.example.c196project.viewmodel.course.CourseEditorViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.c196project.utilities.Const.KEY_EDIT;
 import static com.example.c196project.utilities.Const.COURSE_ID;
+import static com.example.c196project.utilities.Const.KEY_EDIT;
+import static com.example.c196project.utilities.Const.SAVE_EDITING;
 
 public class CourseEditorActivity extends AppCompatActivity
 {
@@ -48,6 +55,8 @@ public class CourseEditorActivity extends AppCompatActivity
     CheckBox setAlarm;
     private boolean isInEdit;
     private CourseEditorViewModel courseEditorViewModel;
+    private TextView assessmentsTextview;
+    private List<AssessmentEntity> assignedAssessments;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -66,7 +75,7 @@ public class CourseEditorActivity extends AppCompatActivity
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
         setAlarm = findViewById(R.id.set_alarm);
 
-        ((TextView)findViewById(R.id.assessment_nav_textview)).setText(R.string.assessments_by_course_tv);
+        assessmentsTextview = findViewById(R.id.assessmentChangeableTv);
 
         courseStatusSpinner = findViewById(R.id.course_status_dropdown);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -77,11 +86,13 @@ public class CourseEditorActivity extends AppCompatActivity
         // Apply the adapter to the spinner
         courseStatusSpinner.setAdapter(adapter);
 
-        if (prevState != null) {
-            isInEdit = prevState.getBoolean(KEY_EDIT);
-        }
         ButterKnife.bind(this);
+
+        if (prevState != null) {
+            isInEdit = prevState.getBoolean(SAVE_EDITING);
+        }
         initViewModel();
+
     }
 
     private void showCalendar(TextView displayLocation, String dateToSet)
@@ -114,6 +125,24 @@ public class CourseEditorActivity extends AppCompatActivity
                 startDateText.setText(Standardizer.standardizeSingleDateString(startDate));
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
             }
+        });
+
+        courseEditorViewModel.relatedAssessments.observe(this, assessmentEntities -> {
+            assignedAssessments = courseEditorViewModel.relatedAssessments.getValue();
+            Log.i("MethodCalled", "I've got assigned assessments now: " + assignedAssessments);
+            String displayAssessmentsList = "";
+            if (assignedAssessments != null) {
+                for (AssessmentEntity assent : assignedAssessments) {
+                    displayAssessmentsList += assent.getTitle() + ", ";
+                }
+            }
+            if (displayAssessmentsList.isEmpty()) {
+                displayAssessmentsList = "No assessments assigned to this course yet.";
+            }
+            else {
+                displayAssessmentsList = displayAssessmentsList.substring(0, displayAssessmentsList.length() - 2);
+            }
+            assessmentsTextview.setText(displayAssessmentsList);
         });
 
         if (kvExtras == null) {
@@ -175,10 +204,10 @@ public class CourseEditorActivity extends AppCompatActivity
         }
     }
 
-    public void navToCourseNote(View view)
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
     {
-
+        outState.putBoolean(SAVE_EDITING, true);
+        super.onSaveInstanceState(outState);
     }
-
-
 }

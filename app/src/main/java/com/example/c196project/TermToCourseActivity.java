@@ -1,6 +1,5 @@
 package com.example.c196project;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.c196project.database.course.CourseEntity;
-import com.example.c196project.ui.CoursesAdapter;
 import com.example.c196project.ui.TermToCourseAdapter;
-import com.example.c196project.viewmodel.course.CourseViewModel;
 import com.example.c196project.viewmodel.mtmrelationships.TermToCourseViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +49,9 @@ public class TermToCourseActivity extends AppCompatActivity
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        kvExtras = getIntent().getExtras();
+        termId = kvExtras.getInt(TERM_ID);
+
         ButterKnife.bind(this);
         initRecyclerView();
         initViewModel();
@@ -67,7 +66,7 @@ public class TermToCourseActivity extends AppCompatActivity
             CourseList.clear();
             CourseList.addAll(courseEntities);
             if (CoursesAdapter == null) {
-                CoursesAdapter = new TermToCourseAdapter(courseEntities, TermToCourseActivity.this);
+                CoursesAdapter = new TermToCourseAdapter(courseEntities, this, this.termId);
                 CoursesRecyclerView.setAdapter(CoursesAdapter);
             }
             else {
@@ -84,7 +83,7 @@ public class TermToCourseActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         CoursesRecyclerView.setLayoutManager(layoutManager);
 
-        CoursesAdapter = new TermToCourseAdapter(CourseList, this);
+        CoursesAdapter = new TermToCourseAdapter(CourseList, this, this.termId);
         CoursesRecyclerView.setAdapter(CoursesAdapter);
 
         DividerItemDecoration divider = new DividerItemDecoration(

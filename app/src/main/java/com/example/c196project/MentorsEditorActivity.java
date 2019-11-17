@@ -1,27 +1,23 @@
 package com.example.c196project;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.c196project.utilities.Standardizer;
 import com.example.c196project.viewmodel.mentor.MentorEditorViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.c196project.utilities.Const.MENTOR_ID;
 import static com.example.c196project.utilities.Const.KEY_EDIT;
+import static com.example.c196project.utilities.Const.MENTOR_ID;
+import static com.example.c196project.utilities.Const.SAVE_EDITING;
 
 public class MentorsEditorActivity extends AppCompatActivity
 {
@@ -47,7 +43,7 @@ public class MentorsEditorActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (prevState != null) {
-            isInEdit = prevState.getBoolean(KEY_EDIT);
+            isInEdit = prevState.getBoolean(SAVE_EDITING);
         }
         ButterKnife.bind(this);
         initViewModel();
@@ -105,5 +101,12 @@ public class MentorsEditorActivity extends AppCompatActivity
     public void deleteMentor() {
         mentorEditorViewModel.deleteMentor();
         finish();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        outState.putBoolean(SAVE_EDITING, true);
+        super.onSaveInstanceState(outState);
     }
 }

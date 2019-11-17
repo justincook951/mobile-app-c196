@@ -10,9 +10,9 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.c196project.database.course.CourseEntity;
@@ -28,8 +28,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.c196project.utilities.Const.KEY_EDIT;
 import static com.example.c196project.utilities.Const.ASSESSMENT_ID;
+import static com.example.c196project.utilities.Const.KEY_EDIT;
+import static com.example.c196project.utilities.Const.SAVE_EDITING;
 
 public class AssessmentsEditorActivity extends AppCompatActivity
 {
@@ -85,7 +86,7 @@ public class AssessmentsEditorActivity extends AppCompatActivity
         relatedCourseDropdown.setAdapter(adapterCourses);
 
         if (prevState != null) {
-            isInEdit = prevState.getBoolean(KEY_EDIT);
+            isInEdit = prevState.getBoolean(SAVE_EDITING);
         }
         ButterKnife.bind(this);
         initViewModel();
@@ -120,7 +121,6 @@ public class AssessmentsEditorActivity extends AppCompatActivity
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
                 existingCourseId = assessmentEntity.getCourseId();
                 assessmentType = assessmentEntity.getAssessmentType();
-                Log.i("MethodCalled", "InitViewModel says the assessmenttype is: " + assessmentType);
             }
         });
 
@@ -209,5 +209,12 @@ public class AssessmentsEditorActivity extends AppCompatActivity
         if (dateLocation == "end"){
             this.endDate = date;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        outState.putBoolean(SAVE_EDITING, true);
+        super.onSaveInstanceState(outState);
     }
 }

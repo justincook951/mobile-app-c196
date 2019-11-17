@@ -2,7 +2,6 @@ package com.example.c196project.database.mtmrelationships;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Index;
 
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.database.term.TermEntity;

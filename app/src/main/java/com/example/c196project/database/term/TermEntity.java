@@ -78,7 +78,7 @@ public class TermEntity
     @Override
     public String toString()
     {
-        return "CourseEntity{" +
+        return "TermEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", startDate=" + startDate +

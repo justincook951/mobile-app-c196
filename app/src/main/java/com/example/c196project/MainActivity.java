@@ -1,30 +1,20 @@
 package com.example.c196project;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.c196project.utilities.WGUNotificationMgr;
-import com.example.c196project.utilities.WGUReceiver;
-import com.example.c196project.viewmodel.MainViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.util.Log;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.util.Calendar;
+import com.example.c196project.utilities.WGUNotificationMgr;
+import com.example.c196project.viewmodel.MainViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import butterknife.ButterKnife;
-
-import static com.example.c196project.utilities.Const.ALARM_EXTRA;
 
 public class MainActivity extends AppCompatActivity
 {

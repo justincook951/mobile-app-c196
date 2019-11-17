@@ -7,8 +7,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.c196project.database.assessment.AssessmentEntity;
-
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -32,4 +32,7 @@ public interface AssessmentDao
 
     @Query("DELETE FROM assessment")
     int deleteAll();
+
+    @Query("SELECT * FROM assessment WHERE courseId = :courseId")
+    List<AssessmentEntity> getAssessmentsByCourseId(int courseId);
 }

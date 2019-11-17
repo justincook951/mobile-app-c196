@@ -10,10 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.c196project.R;
 import com.example.c196project.CourseNotesEditorActivity;
+import com.example.c196project.R;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
-import com.example.c196project.utilities.Standardizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;

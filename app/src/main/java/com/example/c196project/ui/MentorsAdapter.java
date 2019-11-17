@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.c196project.MentorsEditorActivity;
 import com.example.c196project.R;
 import com.example.c196project.database.mentor.MentorEntity;
-import com.example.c196project.utilities.Standardizer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;

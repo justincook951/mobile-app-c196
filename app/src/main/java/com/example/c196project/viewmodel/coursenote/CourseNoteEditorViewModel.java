@@ -2,7 +2,6 @@ package com.example.c196project.viewmodel.coursenote;
 
 import android.app.Application;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.c196project.database.AppRepository;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
 
-import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

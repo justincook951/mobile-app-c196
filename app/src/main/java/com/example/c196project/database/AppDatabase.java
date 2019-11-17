@@ -9,12 +9,12 @@ import androidx.room.TypeConverters;
 
 import com.example.c196project.database.assessment.AssessmentDao;
 import com.example.c196project.database.assessment.AssessmentEntity;
-import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.database.course.CourseDao;
-import com.example.c196project.database.mentor.MentorDao;
-import com.example.c196project.database.mentor.MentorEntity;
+import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.database.coursenote.CourseNoteDao;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
+import com.example.c196project.database.mentor.MentorDao;
+import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.database.mtmrelationships.TermCourseJoinDao;
 import com.example.c196project.database.mtmrelationships.TermCourseJoinEntity;
 import com.example.c196project.database.term.TermDao;

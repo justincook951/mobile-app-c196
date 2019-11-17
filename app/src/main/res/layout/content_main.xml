@@ -17,6 +17,5 @@
         <include layout="@layout/nav_course" />
         <include layout="@layout/nav_assessment" />
         <include layout="@layout/nav_mentor" />
-        <include layout="@layout/nav_notify" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

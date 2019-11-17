@@ -1,13 +1,14 @@
 package com.example.c196project.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
-import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
+import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.database.mtmrelationships.TermCourseJoinEntity;
 import com.example.c196project.database.term.TermEntity;
 import com.example.c196project.utilities.TestData;
@@ -28,7 +29,10 @@ public class AppRepository
     public LiveData<List<AssessmentEntity>> appAssessments;
     public LiveData<List<MentorEntity>> appMentors;
     public LiveData<List<CourseNoteEntity>> appNotes;
+    public LiveData<List<AssessmentEntity>> assessmentsByCourses;
     private int courseCount;
+    private int courseToTermCount;
+    private boolean courseToTermCountSet;
 
     public static AppRepository getInstance(Context context)
     {
@@ -48,6 +52,7 @@ public class AppRepository
         appNotes = getAllNotes();
 
         executor.execute(() -> courseCount = appDb.courseDao().getCount());
+        courseToTermCountSet = false;
     }
 
     private LiveData<List<TermEntity>> getAllTerms()
@@ -135,7 +140,12 @@ public class AppRepository
     public void deleteAllAssessments()
     {
         executor.execute(() -> appDb.assessmentDao().deleteAll());
+    }
 
+    public List<AssessmentEntity> getAssessmentsByCourseId(int courseId)
+    {
+        Log.i("MethodCalled", "Calling getAssessmentsByCourseId");
+        return appDb.assessmentDao().getAssessmentsByCourseId(courseId);
     }
 
     public AssessmentEntity getAssessmentById(int assessmentId)
@@ -223,7 +233,17 @@ public class AppRepository
 
     public int getCourseToTermCount(TermEntity termEntity)
     {
-        return appDb.termCourseJoinDao().getCountCoursesInTerms(termEntity.getId());
+        courseToTermCountSet = false;
+        int increment = 0;
+        executor.execute(() -> {
+            courseToTermCount = appDb.termCourseJoinDao().getCountCoursesInTerms(termEntity.getId());
+            courseToTermCountSet = true;
+        });
+        while (courseToTermCountSet == false && increment < 1000) {
+            // Wait
+            increment++;
+        }
+        return courseToTermCount;
     }
 
     public List<CourseEntity> getCoursesByTerm(int termId)
@@ -236,8 +256,11 @@ public class AppRepository
         executor.execute(() -> appDb.termCourseJoinDao().insertTermCourseJoin(joiner));
     }
 
-    public void deleteCourseNote(TermCourseJoinEntity joiner)
+    public void deleteTermCourseRelationship(int termId, int courseId)
     {
-        executor.execute(() -> appDb.termCourseJoinDao().deleteTermCourseJoin(joiner));
+        executor.execute(() -> {
+            TermCourseJoinEntity tcc = appDb.termCourseJoinDao().getEntityByValues(termId, courseId);
+            appDb.termCourseJoinDao().deleteTermCourseJoin(tcc);
+        });
     }
 }

@@ -8,12 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
-
-import androidx.core.app.NotificationCompat;
-
-import com.example.c196project.MainActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +24,7 @@ public class WGUNotificationMgr
     public void initNotifications(Context context)
     {
         this.context = context;
-        notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         initNotifyChannel(
                 channelId,
                 "Test WGUNotificationMgr",

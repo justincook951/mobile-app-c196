@@ -1,7 +1,5 @@
 package com.example.c196project.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,33 +7,35 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import androidx.annotation.BinderThread;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.c196project.CourseEditorActivity;
 import com.example.c196project.R;
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.utilities.Standardizer;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.c196project.viewmodel.mtmrelationships.TermToCourseViewModel;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.c196project.utilities.Const.COURSE_ID;
-
 public class TermToCourseAdapter extends RecyclerView.Adapter<TermToCourseAdapter.ViewHolder>
 {
 
     private final List<CourseEntity> courses;
-    private final Context context;
+    private final int termId;
+    private TermToCourseViewModel ttcViewModel;
+    private List<CourseEntity> coursesAlreadyInTerm;
 
-    public TermToCourseAdapter(List<CourseEntity> courses, Context context)
+    public TermToCourseAdapter(List<CourseEntity> courses, FragmentActivity activity, int termId)
     {
         this.courses = courses;
-        this.context = context;
+        this.termId = termId;
+        ttcViewModel = ViewModelProviders.of(activity).get(TermToCourseViewModel.class);
+        coursesAlreadyInTerm = ttcViewModel.getMatchedEntries(termId);
     }
 
     @NonNull
@@ -55,12 +55,22 @@ public class TermToCourseAdapter extends RecyclerView.Adapter<TermToCourseAdapte
         String courseDateString = Standardizer.standardizeDateString(course.getStartDate(), course.getEndDate());
         holder.courseDateTextView.setText(courseDateString);
         holder.status_replaceable_text.setText(course.getStatus());
+        coursesAlreadyInTerm = ttcViewModel.getMatchedEntries(termId);
+        if (coursesAlreadyInTerm == null) {
+            coursesAlreadyInTerm = ttcViewModel.getMatchedEntries(termId);
+        }
+        for (CourseEntity courseLooper : coursesAlreadyInTerm) {
+            if (courseLooper.getId() == course.getId()) {
+                holder.addToTerm.setChecked(true);
+                break;
+            }
+        }
         holder.addToTerm.setOnClickListener(view -> {
             if ( ((CheckBox)view).isChecked() ){
-                Log.i("MethodCalled", "It was checked!");
+                ttcViewModel.saveRelationship(termId, course.getId());
             }
             else {
-                Log.i("MethodCalled", "It were not checked..");
+                ttcViewModel.deleteRelationship(termId, course.getId());
             }
         });
     }
