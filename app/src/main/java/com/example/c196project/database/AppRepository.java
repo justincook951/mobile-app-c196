@@ -9,6 +9,7 @@ import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
 import com.example.c196project.database.coursenote.CourseNoteEntity;
 import com.example.c196project.database.mentor.MentorEntity;
+import com.example.c196project.database.mtmrelationships.MentorCourseJoinEntity;
 import com.example.c196project.database.mtmrelationships.TermCourseJoinEntity;
 import com.example.c196project.database.term.TermEntity;
 import com.example.c196project.utilities.TestData;
@@ -29,10 +30,7 @@ public class AppRepository
     public LiveData<List<AssessmentEntity>> appAssessments;
     public LiveData<List<MentorEntity>> appMentors;
     public LiveData<List<CourseNoteEntity>> appNotes;
-    public LiveData<List<AssessmentEntity>> assessmentsByCourses;
     private int courseCount;
-    private int courseToTermCount;
-    private boolean courseToTermCountSet;
 
     public static AppRepository getInstance(Context context)
     {
@@ -52,7 +50,6 @@ public class AppRepository
         appNotes = getAllNotes();
 
         executor.execute(() -> courseCount = appDb.courseDao().getCount());
-        courseToTermCountSet = false;
     }
 
     private LiveData<List<TermEntity>> getAllTerms()
@@ -82,9 +79,7 @@ public class AppRepository
 
     public void deleteTerm(TermEntity term)
     {
-        if (getCourseToTermCount(term) == 0) {
-            executor.execute(() -> appDb.termDao().deleteTerm(term));
-        }
+        executor.execute(() -> appDb.termDao().deleteTerm(term));
     }
 
     // =======COURSES==========
@@ -144,8 +139,12 @@ public class AppRepository
 
     public List<AssessmentEntity> getAssessmentsByCourseId(int courseId)
     {
-        Log.i("MethodCalled", "Calling getAssessmentsByCourseId");
         return appDb.assessmentDao().getAssessmentsByCourseId(courseId);
+    }
+
+    public List<MentorEntity> getMentorsByCourseId(int courseId)
+    {
+        return appDb.mentorCourseJoinDao().getMentorsByCourseId(courseId);
     }
 
     public AssessmentEntity getAssessmentById(int assessmentId)
@@ -233,17 +232,7 @@ public class AppRepository
 
     public int getCourseToTermCount(TermEntity termEntity)
     {
-        courseToTermCountSet = false;
-        int increment = 0;
-        executor.execute(() -> {
-            courseToTermCount = appDb.termCourseJoinDao().getCountCoursesInTerms(termEntity.getId());
-            courseToTermCountSet = true;
-        });
-        while (courseToTermCountSet == false && increment < 1000) {
-            // Wait
-            increment++;
-        }
-        return courseToTermCount;
+        return appDb.termCourseJoinDao().getCountCoursesInTerms(termEntity.getId());
     }
 
     public List<CourseEntity> getCoursesByTerm(int termId)
@@ -261,6 +250,29 @@ public class AppRepository
         executor.execute(() -> {
             TermCourseJoinEntity tcc = appDb.termCourseJoinDao().getEntityByValues(termId, courseId);
             appDb.termCourseJoinDao().deleteTermCourseJoin(tcc);
+        });
+    }
+
+    public int getCourseToMentorCount(MentorEntity mentorEntity)
+    {
+        return appDb.mentorCourseJoinDao().getCountCoursesInMentors(mentorEntity.getId());
+    }
+
+    public List<CourseEntity> getCoursesByMentor(int mentorId)
+    {
+        return appDb.mentorCourseJoinDao().getAllCoursesInMentor(mentorId);
+    }
+
+    public void addMentorToCourse(MentorCourseJoinEntity joiner)
+    {
+        executor.execute(() -> appDb.mentorCourseJoinDao().insertMentorCourseJoin(joiner));
+    }
+
+    public void deleteMentorCourseRelationship(int mentorId, int courseId)
+    {
+        executor.execute(() -> {
+            MentorCourseJoinEntity tcc = appDb.mentorCourseJoinDao().getEntityByValues(mentorId, courseId);
+            appDb.mentorCourseJoinDao().deleteMentorCourseJoin(tcc);
         });
     }
 }

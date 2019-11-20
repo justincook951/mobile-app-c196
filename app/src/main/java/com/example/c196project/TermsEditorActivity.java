@@ -47,6 +47,7 @@ public class TermsEditorActivity extends AppCompatActivity
     private boolean isInEdit;
     private TermEditorViewModel termEditorViewModel;
     private TextView courseNavTextview, CoursesTextview;
+    private List<CourseEntity> relatedCoursesList;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -104,23 +105,30 @@ public class TermsEditorActivity extends AppCompatActivity
                 endDate = termEntity.getEndDate();
                 startDateText.setText(Standardizer.standardizeSingleDateString(startDate));
                 endDateText.setText(Standardizer.standardizeSingleDateString(endDate));
-                String coursesString = "";
-                for (CourseEntity courseEntity : termEditorViewModel.getRelatedCourses()) {
-                    coursesString += courseEntity.getTitle() + ", ";
-                }
-                if (coursesString.equals("")) {
-                    coursesString = "No courses in this term.";
-                }
-                else {
-                    coursesString = coursesString.substring(0, coursesString.length() - 2);
-                }
-                CoursesTextview.setText(coursesString);
             }
             else {
                 CoursesTextview.setText("No courses in this term.");
                 navToCourse.setEnabled(false);
                 navToCourse.setOnClickListener(null);
             }
+        });
+
+        termEditorViewModel.relatedCourses.observe(this, courseEntities -> {
+            if (courseEntities != null && !courseEntities.isEmpty() ) {
+                relatedCoursesList = courseEntities;
+                String coursesString = "";
+                for (CourseEntity courseEntity : courseEntities) {
+                    coursesString += courseEntity.getTitle() + ", ";
+                }
+                if (coursesString.equals("")) {
+                    CoursesTextview.setText("No courses in this term.");
+                }
+                else {
+                    coursesString = coursesString.substring(0, coursesString.length() - 2);
+                }
+                CoursesTextview.setText(coursesString);
+            }
+
         });
 
         Bundle kvExtras = getIntent().getExtras();
@@ -135,15 +143,12 @@ public class TermsEditorActivity extends AppCompatActivity
             // This is a term that's being edited
             int termId = kvExtras.getInt(TERM_ID);
             termEditorViewModel.loadById(termId);
-            Log.i("MethodCalled", "Calling deleteTerm");
             delButton.setOnClickListener(v -> deleteTerm());
             navToCourse = findViewById(R.id.nav_to_course);
             navToCourse.setOnClickListener(v -> {
                 Intent courseListIntent = new Intent(this, TermToCourseActivity.class);
-                List<CourseEntity> relatedCourses = termEditorViewModel.getRelatedCourses();
-                Log.i("MethodCalled", "Related courses list:" + relatedCourses);
                 ArrayList<String> courseIds = new ArrayList<>();
-                for (CourseEntity course : relatedCourses) {
+                for (CourseEntity course : relatedCoursesList) {
                     courseIds.add(Integer.toString(course.getId()));
                 }
                 courseListIntent.putStringArrayListExtra(COURSE_LIST_KEY, courseIds);

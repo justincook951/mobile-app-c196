@@ -76,9 +76,6 @@ public class CourseNotesListActivity extends AppCompatActivity
                     if (entity.getCourseId() == courseId) {
                         courseNoteList.add(entity);
                     }
-                    else {
-                        Log.i("MethodCalled", "Did not add coursenote to course list because " + entity.getCourseId() + " did not equal " + courseId);
-                    }
                 }
                 if (courseNotesAdapter == null) {
                     courseNotesAdapter = new CourseNotesAdapter(courseNoteEntities, CourseNotesListActivity.this);

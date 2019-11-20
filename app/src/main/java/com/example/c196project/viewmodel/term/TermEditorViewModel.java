@@ -2,6 +2,7 @@ package com.example.c196project.viewmodel.term;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,7 +21,7 @@ public class TermEditorViewModel extends AndroidViewModel
 {
 
     public MutableLiveData<TermEntity> mutableTerm = new MutableLiveData<>();
-    private List<CourseEntity> relatedCourses;
+    public MutableLiveData<List<CourseEntity>> relatedCourses = new MutableLiveData<>();
     private AppRepository appRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
     private static boolean isValidInput = true;
@@ -35,10 +36,11 @@ public class TermEditorViewModel extends AndroidViewModel
     {
         // Not a Livedata object; wrap in executor to handle thread
         executor.execute(() -> {
+            List<CourseEntity> relatedCourseList = appRepository.getCoursesByTerm(termId);
+            relatedCourses.postValue(relatedCourseList);
             TermEntity term = appRepository.getTermById(termId);
             // Triggers observer's onChange method
             mutableTerm.postValue(term);
-            relatedCourses = appRepository.getCoursesByTerm(termId);
         });
     }
 
@@ -88,8 +90,4 @@ public class TermEditorViewModel extends AndroidViewModel
         appRepository.deleteTerm(mutableTerm.getValue());
     }
 
-    public List<CourseEntity> getRelatedCourses()
-    {
-        return relatedCourses;
-    }
 }

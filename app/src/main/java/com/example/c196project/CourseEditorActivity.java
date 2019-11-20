@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.c196project.database.assessment.AssessmentEntity;
+import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.utilities.Standardizer;
 import com.example.c196project.viewmodel.course.CourseEditorViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,8 +56,9 @@ public class CourseEditorActivity extends AppCompatActivity
     CheckBox setAlarm;
     private boolean isInEdit;
     private CourseEditorViewModel courseEditorViewModel;
-    private TextView assessmentsTextview;
+    private TextView assessmentsTextview, mentorsTextview;
     private List<AssessmentEntity> assignedAssessments;
+    private List<MentorEntity> assignedMentors;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -76,6 +78,7 @@ public class CourseEditorActivity extends AppCompatActivity
         setAlarm = findViewById(R.id.set_alarm);
 
         assessmentsTextview = findViewById(R.id.assessmentChangeableTv);
+        mentorsTextview = findViewById(R.id.mentor_changeable_tv);
 
         courseStatusSpinner = findViewById(R.id.course_status_dropdown);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -129,7 +132,6 @@ public class CourseEditorActivity extends AppCompatActivity
 
         courseEditorViewModel.relatedAssessments.observe(this, assessmentEntities -> {
             assignedAssessments = courseEditorViewModel.relatedAssessments.getValue();
-            Log.i("MethodCalled", "I've got assigned assessments now: " + assignedAssessments);
             String displayAssessmentsList = "";
             if (assignedAssessments != null) {
                 for (AssessmentEntity assent : assignedAssessments) {
@@ -143,6 +145,20 @@ public class CourseEditorActivity extends AppCompatActivity
                 displayAssessmentsList = displayAssessmentsList.substring(0, displayAssessmentsList.length() - 2);
             }
             assessmentsTextview.setText(displayAssessmentsList);
+        });
+
+        courseEditorViewModel.relatedMentors.observe(this, mentorEntities -> {
+            assignedMentors = courseEditorViewModel.relatedMentors.getValue();
+            String displayMentorsList = "";
+            if (assignedMentors != null) {
+                for (MentorEntity mentor : assignedMentors) {
+                    displayMentorsList += mentor.getName() + ": Email - " + mentor.getEmail() + " / Phone - " + mentor.getPhone() + "\n";
+                }
+            }
+            if (displayMentorsList.isEmpty()) {
+                displayMentorsList = "No mentors assigned to this course yet.";
+            }
+            mentorsTextview.setText(displayMentorsList);
         });
 
         if (kvExtras == null) {

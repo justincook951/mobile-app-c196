@@ -1,5 +1,6 @@
 package com.example.c196project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class MentorsEditorActivity extends AppCompatActivity
 
     private boolean isInEdit;
     private MentorEditorViewModel mentorEditorViewModel;
+    private FloatingActionButton navMentorToCourse;
 
     @Override
     protected void onCreate(Bundle prevState)
@@ -71,6 +73,12 @@ public class MentorsEditorActivity extends AppCompatActivity
             mentorEditorViewModel.loadById(mentorId);
             final FloatingActionButton delButton = findViewById(R.id.delete_mentor);
             delButton.setOnClickListener(v -> deleteMentor());
+            navMentorToCourse = findViewById(R.id.nav_mentor_to_course);
+            navMentorToCourse.setOnClickListener( (v) -> {
+                Intent mentorToCourse = new Intent(this, MentorToCourseActivity.class);
+                mentorToCourse.putExtra(MENTOR_ID, mentorId);
+                startActivity(mentorToCourse);
+            });
         }
     }
 

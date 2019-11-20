@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.c196project.database.AppRepository;
 import com.example.c196project.database.assessment.AssessmentEntity;
 import com.example.c196project.database.course.CourseEntity;
+import com.example.c196project.database.mentor.MentorEntity;
 import com.example.c196project.utilities.WGUNotificationMgr;
 
 import java.util.Date;
@@ -24,6 +25,7 @@ public class CourseEditorViewModel extends AndroidViewModel
 
     public MutableLiveData<CourseEntity> mutableCourse = new MutableLiveData<>();
     public MutableLiveData<List<AssessmentEntity>> relatedAssessments = new MutableLiveData<>();
+    public MutableLiveData<List<MentorEntity>> relatedMentors = new MutableLiveData<>();
     private AppRepository appRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
     private static boolean isValidInput = true;
@@ -43,8 +45,9 @@ public class CourseEditorViewModel extends AndroidViewModel
             // Triggers observer's onChange method
             mutableCourse.postValue(course);
             List<AssessmentEntity> assessmentList = appRepository.getAssessmentsByCourseId(courseId);
-            Log.i("MethodCalled", "The viewmodel is about to post assessmentsList: " + assessmentList);
+            List<MentorEntity> mentorsList = appRepository.getMentorsByCourseId(courseId);
             relatedAssessments.postValue(assessmentList);
+            relatedMentors.postValue(mentorsList);
         });
     }
 

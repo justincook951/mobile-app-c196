@@ -138,7 +138,7 @@
         android:layout_marginTop="16dp"
         android:text="Assessments:"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/course_status_desc"
         app:layout_constraintTop_toBottomOf="@+id/course_status_desc" />
 
     <TextView
@@ -147,9 +147,32 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="ChangeForAssessmentList"
+        android:text="@string/course_status"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assessIndicator" />
+        app:layout_constraintTop_toBottomOf="@+id/assessIndicator"  />
+
+    <TextView
+        android:id="@+id/mentorIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Mentors:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/assessmentChangeableTv"
+        app:layout_constraintTop_toBottomOf="@+id/assessmentChangeableTv" />
+
+    <TextView
+        android:id="@+id/mentor_changeable_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="16dp"
+        android:text="ChangeForMentorList"
+        app:layout_constraintStart_toStartOf="@+id/mentorIndicator"
+        app:layout_constraintTop_toBottomOf="@+id/mentorIndicator" />
+
 
     <include
         layout="@layout/nav_course_note"
@@ -157,7 +180,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assessmentChangeableTv" />
+        app:layout_constraintTop_toBottomOf="@+id/mentor_changeable_tv" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
