@@ -128,7 +128,9 @@ public class TermsEditorActivity extends AppCompatActivity
                 }
                 CoursesTextview.setText(coursesString);
             }
-
+            else {
+                CoursesTextview.setText("No courses in this term.");
+            }
         });
 
         Bundle kvExtras = getIntent().getExtras();

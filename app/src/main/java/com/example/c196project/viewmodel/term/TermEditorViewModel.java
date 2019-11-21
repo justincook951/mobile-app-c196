@@ -87,7 +87,10 @@ public class TermEditorViewModel extends AndroidViewModel
 
     public void deleteTerm()
     {
-        appRepository.deleteTerm(mutableTerm.getValue());
+        Log.i("MethodCalled", "Relatedcs: " + relatedCourses.getValue());
+        if (relatedCourses.getValue().size() == 0) {
+            appRepository.deleteTerm(mutableTerm.getValue());
+        }
     }
 
 }

@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.c196project.utilities.WGUNotificationMgr;
@@ -34,6 +37,27 @@ public class MainActivity extends AppCompatActivity
 
         assessmentNav = findViewById(R.id.nav_to_assessment);
         assessmentNav.setOnClickListener(v -> send_nav_request(findViewById(R.id.nav_to_assessment)));
+
+        ConstraintLayout targetLayout = findViewById(R.id.mentor_nav_cl);
+        FloatingActionButton nav_to_mentor = new FloatingActionButton(this);
+        // This doesn't work. Cool. I tried. Whatever :D
+        ConstraintLayout.MarginLayoutParams  layoutParams = new ConstraintLayout.MarginLayoutParams (
+                ConstraintLayout.MarginLayoutParams .WRAP_CONTENT,
+                ConstraintLayout.MarginLayoutParams .WRAP_CONTENT
+        );
+        layoutParams.setMargins(160, 160, 0, 0);
+        nav_to_mentor.setClickable(true);
+        nav_to_mentor.setFocusable(true);
+        nav_to_mentor.setOnClickListener((v) -> navToMentor());
+        String uri = "@android:drawable/ic_media_play";
+        int imgResId = getResources().getIdentifier(uri, null, getPackageName());
+        nav_to_mentor.setImageResource(imgResId);
+        nav_to_mentor.setLayoutParams(layoutParams);
+
+        TextView navInfo = new TextView(this);
+
+
+        targetLayout.addView(nav_to_mentor);
 
         ButterKnife.bind(this);
         initViewModel();
@@ -166,15 +190,14 @@ public class MainActivity extends AppCompatActivity
                 Intent assessmentIntent = new Intent(this, AssessmentsListActivity.class);
                 startActivity(assessmentIntent);
                 break;
-            case (R.id.nav_to_mentor):
-                Intent mentorIntent = new Intent(this, MentorsListActivity.class);
-                startActivity(mentorIntent);
-                break;
-            case (R.id.send_test_notify):
-                WGUNotificationMgr notifymgr = new WGUNotificationMgr();
-
             default:
                 break;
         }
+    }
+
+    public void navToMentor()
+    {
+        Intent mentorIntent = new Intent(this, MentorsListActivity.class);
+        startActivity(mentorIntent);
     }
 }
