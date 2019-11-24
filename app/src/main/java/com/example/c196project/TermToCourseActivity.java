@@ -50,7 +50,9 @@ public class TermToCourseActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         kvExtras = getIntent().getExtras();
-        termId = kvExtras.getInt(TERM_ID);
+        if (kvExtras != null) {
+            termId = kvExtras.getInt(TERM_ID);
+        }
 
         ButterKnife.bind(this);
         initRecyclerView();

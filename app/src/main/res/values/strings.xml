@@ -41,6 +41,6 @@
     <string name="assessments_by_course_tv">See all assessments for this course</string>
     <string name="assessment_type_text">Assessment Type:</string>
     <string name="course_status">Course Status:</string>
-    <string name="alarms_for_dates">Set Alarms for these dates?</string>
+    <string name="alarms_for_dates">Set Alarm for this date?</string>
     <string name="add_course">Add Course</string>
 </resources>

@@ -15,11 +15,11 @@ public class WGUReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        notificationId++;
         notificationMgr = new WGUNotificationMgr();
         notificationMgr.initNotifications(context);
         Bundle extras = intent.getExtras();
         notificationMgr.sendNotification(notificationId, extras.getString(ALARM_EXTRA));
-        notificationId++;
     }
 
 }

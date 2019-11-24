@@ -53,7 +53,7 @@ public class CourseEditorActivity extends AppCompatActivity
     Date startDate, endDate;
     Calendar cal;
     Bundle kvExtras;
-    CheckBox setAlarm;
+    CheckBox setAlarmStart, setAlarmEnd;
     private boolean isInEdit;
     private CourseEditorViewModel courseEditorViewModel;
     private TextView assessmentsTextview, mentorsTextview;
@@ -75,7 +75,8 @@ public class CourseEditorActivity extends AppCompatActivity
 
         startBtn.setOnClickListener(v -> showCalendar(startDateText, "start"));
         endBtn.setOnClickListener(v -> showCalendar(endDateText, "end"));
-        setAlarm = findViewById(R.id.set_alarm);
+        setAlarmStart = findViewById(R.id.set_alarm_start_date);
+        setAlarmEnd = findViewById(R.id.set_alarm_end_date);
 
         assessmentsTextview = findViewById(R.id.assessmentChangeableTv);
         mentorsTextview = findViewById(R.id.mentor_changeable_tv);
@@ -201,7 +202,7 @@ public class CourseEditorActivity extends AppCompatActivity
             finish();
         }
         String selectedStatus = courseStatusSpinner.getSelectedItem().toString();
-        courseEditorViewModel.saveCourse(courseName, selectedStatus, startDate, endDate, setAlarm.isChecked());
+        courseEditorViewModel.saveCourse(courseName, selectedStatus, startDate, endDate, setAlarmStart.isChecked(), setAlarmEnd.isChecked());
         finish();
     }
 

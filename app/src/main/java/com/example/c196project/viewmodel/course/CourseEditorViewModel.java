@@ -51,7 +51,7 @@ public class CourseEditorViewModel extends AndroidViewModel
         });
     }
 
-    public void saveCourse(String courseTitle, String status, Date startDate, Date endDate, boolean setAlarm)
+    public void saveCourse(String courseTitle, String status, Date startDate, Date endDate, boolean setAlarmStart, boolean setAlarmEnd)
     {
         isValidInput = true;
         CourseEntity selectedCourse = mutableCourse.getValue();
@@ -72,11 +72,16 @@ public class CourseEditorViewModel extends AndroidViewModel
         selectedCourse = validateCourse(selectedCourse);
         if (isValidInput) {
             appRepository.insertCourse(selectedCourse);
-            if (setAlarm) {
+            if (setAlarmStart) {
                 if (notifymgr == null) {
                     notifymgr = new WGUNotificationMgr();
                 }
                 notifymgr.setAlarm(startDate, "Your course is set to start today: " + courseTitle + "!", this.getApplication().getApplicationContext());
+            }
+            if (setAlarmEnd) {
+                if (notifymgr == null) {
+                    notifymgr = new WGUNotificationMgr();
+                }
                 notifymgr.setAlarm(endDate, "Your course is set to end today: " + courseTitle + "!", this.getApplication().getApplicationContext());
             }
         }

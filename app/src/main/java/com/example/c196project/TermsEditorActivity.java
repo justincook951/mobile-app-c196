@@ -150,10 +150,12 @@ public class TermsEditorActivity extends AppCompatActivity
             navToCourse.setOnClickListener(v -> {
                 Intent courseListIntent = new Intent(this, TermToCourseActivity.class);
                 ArrayList<String> courseIds = new ArrayList<>();
-                for (CourseEntity course : relatedCoursesList) {
-                    courseIds.add(Integer.toString(course.getId()));
+                if (relatedCoursesList != null) {
+                    for (CourseEntity course : relatedCoursesList) {
+                        courseIds.add(Integer.toString(course.getId()));
+                    }
+                    courseListIntent.putStringArrayListExtra(COURSE_LIST_KEY, courseIds);
                 }
-                courseListIntent.putStringArrayListExtra(COURSE_LIST_KEY, courseIds);
                 courseListIntent.putExtra(TERM_ID, kvExtras.getInt(TERM_ID));
                 startActivity(courseListIntent);
             });

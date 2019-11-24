@@ -110,7 +110,7 @@
         app:layout_constraintTop_toBottomOf="@+id/end_date_button" />
 
     <CheckBox
-        android:id="@+id/set_alarm"
+        android:id="@+id/set_alarm_end_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -118,6 +118,16 @@
         android:text="@string/alarms_for_dates"
         app:layout_constraintStart_toEndOf="@+id/end_date_button"
         app:layout_constraintTop_toBottomOf="@+id/end_date_replaceable" />
+
+    <CheckBox
+        android:id="@+id/set_alarm_start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/alarms_for_dates"
+        app:layout_constraintStart_toEndOf="@+id/start_date_button"
+        app:layout_constraintTop_toBottomOf="@+id/start_date_replaceable" />
 
     <TextView
         android:id="@+id/course_status_desc"

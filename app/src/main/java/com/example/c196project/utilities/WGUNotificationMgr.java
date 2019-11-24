@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -55,6 +56,7 @@ public class WGUNotificationMgr
                         .setSmallIcon(android.R.drawable.ic_dialog_info)
                         .setChannelId(channelId)
                         .build();
+        Log.i("MethodCalled", "Notificaiton ID set: " + notificationId);
         notificationManager.notify(notificationId, notification);
     }
 
@@ -70,6 +72,7 @@ public class WGUNotificationMgr
         due.set(Calendar.HOUR_OF_DAY, 0);
         due.set(Calendar.MINUTE, 0);
         alarmMgr.set(AlarmManager.RTC_WAKEUP, due.getTimeInMillis(), sender);
+        Log.i("MethodCalled", "An alarm should now be set for " + due);
     }
 
 
